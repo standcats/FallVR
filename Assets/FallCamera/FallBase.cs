@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace StandCats
 {
-    [RequireComponent(typeof(CapsuleCollider))]
     public class FallBase : MonoBehaviour
     {
 
