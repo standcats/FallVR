@@ -15,30 +15,37 @@ namespace StandCats
 
         private void FixedUpdate()
         {//地面判定
-            Vector3 start = this.transform.position;
-            Vector3 end = this.transform.position;
-            RaycastHit[] hit = new RaycastHit[3];
-            var count = Physics.SphereCastNonAlloc(start, SphereCastSize, Vector3.down, hit, SphereCastLength);
-            if (count > 0)
+            if (SphereCastLength > 0 && SphereCastSize > 0)
             {
-                var name = hit[0].transform.gameObject.name;
-                Debug.Log("Hit Name" + name);
-                Environment.FallFlag = false;
-            }
-            else
-            {
-                Environment.FallFlag = true;//ぶつかるものがなければ上昇する
+                Vector3 start = this.transform.position;
+                Vector3 end = this.transform.position;
+                RaycastHit[] hit = new RaycastHit[3];
+                var count = Physics.SphereCastNonAlloc(start, SphereCastSize, Vector3.down, hit, SphereCastLength);
+                if (count > 0)
+                {
+                    var name = hit[0].transform.gameObject.name;
+                    Environment.FallFlag = false;
+                }
+                else
+                {
+                    Environment.FallFlag = true;//ぶつかるものがなければ上昇する
+                }
             }
         }
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            var color = Gizmos.color;
-            Vector3 start = this.transform.position;
-            Gizmos.DrawWireSphere(start, SphereCastSize);
-            for (int i = 0; i < SphereCastLength / SphereCastSize; i++)
+            if (SphereCastLength > 0 && SphereCastSize > 0)
             {
-                Gizmos.DrawWireSphere(start + (Vector3.down * i) + (Vector3.down * SphereCastSize), SphereCastSize);
+                var color = Gizmos.color;
+                Vector3 start = this.transform.position;
+                Gizmos.DrawLine(start, start + (Vector3.down * SphereCastLength));
+                RaycastHit[] hit = new RaycastHit[3];
+                var count = Physics.SphereCastNonAlloc(start, SphereCastSize, Vector3.down, hit, SphereCastLength);
+                if (count > 0)
+                {
+                    Gizmos.DrawWireSphere(hit[0].point + (Vector3.up * SphereCastSize ), SphereCastSize);
+                }
             }
         }
 #endif
